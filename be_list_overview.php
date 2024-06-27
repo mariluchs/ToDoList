@@ -9,13 +9,14 @@ $result = $conn->query($sql);
 
 if ($result !== false && $result->num_rows > 0) {
     echo "<table id='table_toDoList'>";
-    echo "<tr><th>Liste-Nr.</th><th>Titel</th><th>Erstellungsdatum</th>";
+    echo "<tr><th>Liste-Nr.</th><th>Titel</th><th>Erstellungsdatum</th><th></th></tr>";
 
     while ($row = $result->fetch_assoc()) {
         echo "<tr>";
         echo "<td>" . $row["id"] . "</td>";
         echo "<td>" . $row["name"] . "</td>";
         echo "<td>" . $row["created_at"] . "</td>";
+        echo "<td><a href='be_list_delete.php?id=" . $row['id'] . "id" . $row['id'] . "'>Löschen</a></td>";
         echo "</tr>";
     }
     echo "</table>";
