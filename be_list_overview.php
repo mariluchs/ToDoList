@@ -9,7 +9,7 @@ $result = $conn->query($sql);
 
 if ($result !== false && $result->num_rows > 0) {
     echo "<table id='table_toDoList'>";
-    echo "<tr><th>Liste-Nr.</th><th>Titel</th><th>Erstellungsdatum</th><th></th></tr>";
+    echo "<tr><th>Liste-Nr.</th><th>Titel</th><th>Erstellungsdatum</th><th>Aktionen</th></tr>";
 
     while ($row = $result->fetch_assoc()) {
         echo "<tr>";

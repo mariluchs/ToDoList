@@ -85,8 +85,6 @@ session_start();
         }
     </style>
 </head>
-    </style>
-</head>
 <body>
     
     <h1>Task Masters</h1>
