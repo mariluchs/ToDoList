@@ -7,12 +7,27 @@ session_start();
 <head>
     <title>Übersicht To-Do-Listen</title>
     <style>
+
+        h1 {
+            text-align: center;
+        }
+
         h2 {
             text-align: center;
         }
 
         .form-container-addList {
-            text-align: right;
+            text-align: center;
+        }
+
+        .form-container-addList input {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid ;
+            border-radius: 5px;
+            margin: 20px 0;
+            width: 30%;
+            text-align: center;
         }
 
         .messages{
@@ -92,7 +107,7 @@ session_start();
 
     <div class="form-container-addList">
         <form action="be_list_add.php" method="POST">
-            <input type="text" id="list_name" name="list_name" placeholder="Neue Liste hinzfügen" >
+            <input type="text" id="list_name" name="list_name" placeholder="Neue Liste hinzfügen..." >
         </form>
     </div>  
     
