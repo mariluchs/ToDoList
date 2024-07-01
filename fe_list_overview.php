@@ -131,4 +131,17 @@ session_start();
     </div>
             
 </body>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    // Add click event to each row
+    document.querySelectorAll('.clickable-row').forEach(row => {
+        row.addEventListener('click', function() {
+            var id = this.getAttribute('data-id');
+            // Redirect to the detail page
+            window.location.href = 'fe_list_detail?id=' + id;
+        });
+    });
+});
+</script>
 </html>
