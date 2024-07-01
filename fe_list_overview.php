@@ -16,6 +16,10 @@ session_start();
             text-align: center;
         }
 
+        .be-code {
+            text-align: center;
+        }
+
         .form-container-addList {
             text-align: center;
         }
@@ -120,7 +124,7 @@ session_start();
             ?>
     </div>
 
-    <div>
+    <div class="be-code">
     <?php
         include "be_list_overview.php";
     ?>

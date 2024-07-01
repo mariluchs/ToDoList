@@ -21,6 +21,6 @@ if ($result !== false && $result->num_rows > 0) {
     }
     echo "</table>";
 } else {
-    echo "Keine Listen vorhanden";
+    echo "Erstellen Sie eine neue Liste!";
 }
 ?>
