@@ -69,17 +69,18 @@ session_start();
     <?php // table with lists
        include "0_database_connection.php";
 
-       $sql = "SELECT lists.id, lists.name, lists.created_at FROM lists ORDER BY lists.id DESC";
+       $sql = "SELECT lists.id, lists.name, lists.number_of_tasks, lists.created_at FROM lists ORDER BY lists.id DESC";
        $result = $conn->query($sql);
        
        if ($result !== false && $result->num_rows > 0) {
            echo "<table id='table_toDoList'>";
-           echo "<tr><th>Liste-Nr.</th><th>Titel</th><th>Erstellungsdatum</th><th>Aktionen</th></tr>";
+           echo "<tr><th>Liste-Nr.</th><th>Titel</th><th>Aufgaben</th><th>Erstellungsdatum</th><th>Aktionen</th></tr>";
        
            while ($row = $result->fetch_assoc()) {
                echo "<tr class='clickable-row' data-id='" . htmlspecialchars($row["id"], ENT_QUOTES, 'UTF-8') . "' data-name='" . htmlspecialchars($row["name"], ENT_QUOTES, 'UTF-8') . "'>";
                echo "<td>" . htmlspecialchars($row["id"], ENT_QUOTES, 'UTF-8') . "</td>";
                echo "<td>" . htmlspecialchars($row["name"], ENT_QUOTES, 'UTF-8') . "</td>";
+               echo "<td>" . htmlspecialchars($row["number_of_tasks"], ENT_QUOTES, 'UTF-8') . "</td>";
                echo "<td>" . htmlspecialchars($row["created_at"], ENT_QUOTES, 'UTF-8') . "</td>";
                echo "<td><a href='3_delete_list.php?id=" . htmlspecialchars($row['id'], ENT_QUOTES, 'UTF-8') . "'>Löschen</a></td>";
                echo "</tr>";

@@ -14,6 +14,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmt_insert->execute();
         $stmt_insert->close();
 
+        // Number of Tasks für Liste erhöhen
+        $sql_update = "UPDATE lists SET number_of_tasks = number_of_tasks + 1 WHERE id = ?";
+        $stmt_update = $conn->prepare($sql_update);
+        $stmt_update->bind_param("i", $list_id);
+        $stmt_update->execute();
+        $stmt_update->close();
+
         // Nach dem Hinzufügen zurück zur Liste leiten
         header("Location: 4_detail_page.php?list_id=" . $list_id);
         exit;

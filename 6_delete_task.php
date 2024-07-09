@@ -23,6 +23,13 @@ if (isset($_GET['id']) && isset($_GET['list_id'])) {
         $stmt->bind_param("i", $task_id);
         $stmt->execute();
 
+        // Number of Tasks für Liste verringern
+        $sql_update = "UPDATE lists SET number_of_tasks = number_of_tasks - 1 WHERE id = ?";
+        $stmt_update = $conn->prepare($sql_update);
+        $stmt_update->bind_param("i", $list_id);
+        $stmt_update->execute();
+        $stmt_update->close();
+
         if ($stmt->affected_rows > 0) {
             $_SESSION["message"] = "Die Aufgabe '$task_name' wurde erfolgreich gelöscht";
         } else {
