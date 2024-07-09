@@ -2,6 +2,7 @@
 session_start();
 include "0_database_connection.php";
 
+// Die ID der Aufgabe und der Liste wird aus dem Formular in 4_detail_page.php übergeben
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (!empty($_POST['task_id']) && !empty($_POST['list_id'])) {
         $list_id = intval($_POST['list_id']);
@@ -16,15 +17,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $current_status = $result->fetch_assoc()['status'];
             $status->close();
 
+            //Wenn der Status der Aufgabe 'Done' ist, wird er auf 'ToDo' gesetzt und umgekehrt
             if ($current_status == "Done") {
-                // Status auf 'ToDo' ändern und done_at zurücksetzen
                 $updateToDo = $conn->prepare("UPDATE tasks SET status = 'ToDo', done_at = NULL WHERE id = ?");
                 if ($updateToDo) {
                     $updateToDo->bind_param("i", $task_id);
                     $updateToDo->execute();
                     $updateToDo->close();
-                } else {
-                    echo "Fehler bei der Vorbereitung der SQL-Abfrage für ToDo: " . $conn->error;
                 }
             } else {
                 // Status auf 'Done' ändern und done_at setzen
@@ -33,21 +32,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $updateDone->bind_param("i", $task_id);
                     $updateDone->execute();
                     $updateDone->close();
-                } else {
-                    echo "Fehler bei der Vorbereitung der SQL-Abfrage für Done: " . $conn->error;
                 }
             }
-
-            // Nach der Aktualisierung zurück zur Liste leiten
-            header("Location: 4_detail_page.php?list_id=" . $list_id);
-            exit;
-        } else {
-            echo "Fehler bei der Vorbereitung der SQL-Abfrage für Status: " . $conn->error;
         }
     } else {
         echo "Keine Aufgabe oder Liste ausgewählt";
     }
 }
+
+// Nach der Aktualisierung zurück zur Liste leiten
+header("Location: 4_detail_page.php?list_id=" . $list_id);
 
 $conn->close();
 ?>

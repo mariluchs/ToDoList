@@ -3,42 +3,38 @@ session_start();
 
 include "0_database_connection.php";
 
+// Die ID der Liste wird aus der URL übergeben
 if (isset($_GET['id'])) {
     $list_id = intval($_GET['id']);
 
-    // Überprüfen, ob die Liste existiert
+    // Es wird überprüft ob die Liste existiert und gleichzeitig der Name der Liste abgerufen
     $names = $conn->prepare("SELECT name FROM lists WHERE id = ?");
     $names->bind_param("i", $list_id);
     $names->execute();
     $result = $names->get_result();
 
+    // Wenn die Liste existiert, wird sie gelöscht
     if ($result->num_rows > 0) {
         $list_name = $result->fetch_assoc()["name"];
         $names->close();
 
-        // Alle Aufgaben der Liste löschen
+        // Zuerst werden noch alle Aufgaben der Liste löschen
         $sql = "DELETE FROM tasks WHERE list_id = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("i", $list_id);
         $stmt->execute();
         $stmt->close();
 
-        // Liste löschen
+        // Anschließend wird die Liste gelöscht
         $sql = "DELETE FROM lists WHERE id = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("i", $list_id);
         $stmt->execute();
-
-        if ($stmt->affected_rows > 0) {
-            $_SESSION["message"] = "Die Liste '$list_name' wurde erfolgreich gelöscht";
-        } else {
-            $_SESSION["message"] = "Fehler beim Löschen der Liste '$list_name'";
-        }
-
         $stmt->close();
     }
 }
 
+//Weiterleitung auf die Listenübersicht
 header("Location: 1_list_overview.php");
 exit();
 ?>

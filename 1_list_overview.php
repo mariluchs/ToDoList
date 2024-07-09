@@ -60,13 +60,13 @@ session_start();
 <body>
     <h1>Task Masters</h1>
 
-    <div class="form-container-addList"> <!-- form to add a new list -->
+    <div class="form-container-addList"> <!-- Formular um eine neue Liste hinzuzufügen -->
         <form action="2_add_list.php" method="POST">
             <input type="text" name="list_name" placeholder="Neue Liste hinzufügen...">
         </form>
     </div>
         
-    <?php // table with lists
+    <?php // Tabelle mit allen Listen
        include "0_database_connection.php";
 
        $sql = "SELECT lists.id, lists.name, lists.number_of_tasks, lists.created_at FROM lists ORDER BY lists.id DESC";
@@ -91,7 +91,7 @@ session_start();
        }
     ?> 
 
-    <script> // Clickable rows
+    <script> // Funktion um die Zeile klickbar zu machen
     document.addEventListener('DOMContentLoaded', () => {
         const rows = document.querySelectorAll('.clickable-row');
         rows.forEach(row => {
@@ -106,5 +106,6 @@ session_start();
         });
     });
     </script>
+
 </body>
 </html>

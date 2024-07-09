@@ -92,35 +92,48 @@ session_start();
     <?php
     include "0_database_connection.php";
 
+    //Die list_id wird aus der URL übergeben
     if (!empty($_GET['list_id'])) {
         $list_id = intval($_GET['list_id']); 
 
-        // Holen des Listennamens
+        // Der Listenname wird abgerufen
         $sql_list = "SELECT name FROM lists WHERE id = ?";
         $stmt_list = $conn->prepare($sql_list);
         $stmt_list->bind_param("i", $list_id);
         $stmt_list->execute();
         $result_list = $stmt_list->get_result();
 
+        // Button zurück zur Listenübersicht
         echo "<div class='backButton'><button><a href='1_list_overview.php'>Zurück zur Listenübersicht</a></button></div>";
 
+        // Wenn die Liste gefunden wird, wird der Name als Überschrift ausgegeben, ansonsten wird eine Fehlermeldung ausgegeben
         if ($result_list !== false && $result_list->num_rows > 0) {
             $row_list = $result_list->fetch_assoc();
             echo "<h1>" . htmlspecialchars($row_list['name'], ENT_QUOTES, 'UTF-8') . "</h1>";
         } else {
             echo "<p style='text-align: center;'>Liste nicht gefunden</p>";
-            exit; // Beenden, wenn die Liste nicht gefunden wird
         }
 
         $stmt_list->close();
+    ?>
 
-        // Holen der Aufgaben für die Liste
+    <div class="addTask"> <!-- Formular um einen Task hinzuzufügen -->
+        <form action="5_add_task.php" method="POST">
+            <input type="text" name="task_name" placeholder="Neue Aufgabe hinzufügen..." required>
+            <input type="hidden" name="list_id" value="<?php echo htmlspecialchars($list_id, ENT_QUOTES, 'UTF-8'); ?>">
+            <button type="submit">Hinzufügen</button>
+        </form>
+    </div>
+
+    <?php
+        // Es werden alle Aufgaben der Liste abgerufen
         $sql_tasks = "SELECT * FROM tasks WHERE list_id = ?";
         $stmt_tasks = $conn->prepare($sql_tasks);
         $stmt_tasks->bind_param("i", $list_id);
         $stmt_tasks->execute();
         $result_tasks = $stmt_tasks->get_result();
 
+        // Wenn Aufgaben gefunden werden, werden sie in einer Tabelle ausgegeben, ansonsten wird eine Meldung ausgegeben
         if ($result_tasks !== false && $result_tasks->num_rows > 0) {
             echo "<form action='7_check_task.php' method='POST'>";
             echo "<table>";
@@ -142,20 +155,12 @@ session_start();
         }
 
         $stmt_tasks->close();
-    } else {
-        echo "<p style='text-align: center;'>Keine Liste ausgewählt</p>";
     }
 
     $conn->close();
     ?>
 
-    <div class="addTask"> <!-- add a task -->
-        <form action="5_add_task.php" method="POST">
-            <input type="text" name="task_name" placeholder="Neue Aufgabe hinzufügen..." required>
-            <input type="hidden" name="list_id" value="<?php echo htmlspecialchars($list_id, ENT_QUOTES, 'UTF-8'); ?>">
-            <button type="submit">Hinzufügen</button>
-        </form>
-    </div>
+    
     
 </body>
 </html>
