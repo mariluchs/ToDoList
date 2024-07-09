@@ -67,7 +67,7 @@ session_start();
     </div>
         
     <?php // table with lists
-       include "../be_database_connection.php";
+       include "0_database_connection.php";
 
        $sql = "SELECT lists.id, lists.name, lists.created_at FROM lists ORDER BY lists.id DESC";
        $result = $conn->query($sql);

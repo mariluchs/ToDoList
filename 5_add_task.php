@@ -1,41 +1,26 @@
 <?php
-
 session_start();
-
 include "0_database_connection.php";
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $task_name = $_POST['task_name'];
-    $list_id = $_POST['list_id'];
-    $status = "ToDo";
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if (!empty($_POST['task_name']) && !empty($_POST['list_id'])) {
+        $task_name = htmlspecialchars($_POST['task_name'], ENT_QUOTES, 'UTF-8');
+        $list_id = intval($_POST['list_id']);
 
-    if (!empty($task_name)) {
+        // Neue Aufgabe hinzufügen
+        $sql_insert = "INSERT INTO tasks (name, status, list_id) VALUES (?, 'ToDo', ?)";
+        $stmt_insert = $conn->prepare($sql_insert);
+        $stmt_insert->bind_param("ss", $task_name, $list_id);
+        $stmt_insert->execute();
+        $stmt_insert->close();
 
-        $newTask = $conn->prepare("INSERT INTO tasks (name, list_id, status) VALUES (?, ?, ?)");
-        
-        if ($newTask) {
-            $newTask->bind_param("sss", $task_name, $list_id, $status);
-            $newTask->execute(); // Add this line to execute the prepared statement
-        } else {
-            // Handle query preparation error
-            echo "Error preparing SQL query: " . $conn->error;
-            exit;
-        }
-
+        // Nach dem Hinzufügen zurück zur Liste leiten
+        header("Location: 4_detail_page.php?list_id=" . $list_id);
+        exit;
     } else {
-
-        $_SESSION["message"] = "Geben Sie einen Titel ein!";    
+        echo "Fehlende Daten für das Hinzufügen einer Aufgabe";
     }
 }
-else {
-    // Handle missing POST parameters
-    echo "Missing POST parameters";
-    exit;
 
-}
-
-
-
-//header ("Location: 1_list_overview.php"); // Vorläufige Weiterleitung
-header("Location: 4_detail_page.php?list_id=" . $list_id); // individuelle Weiterleitung
+$conn->close();
 ?>
