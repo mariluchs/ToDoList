@@ -2,8 +2,6 @@
 session_start();
 include "0_database_connection.php";
 
-$messages = "";
-
 // Die Variable list_name wird aus dem Formular in 1_list_overview.php übergeben, das Datum wird neu erzeugt
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $list_name = $_POST['list_name'];
