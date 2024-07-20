@@ -136,11 +136,11 @@ session_start();
         // Wenn Aufgaben gefunden werden, werden sie in einer Tabelle ausgegeben, ansonsten wird eine Meldung ausgegeben
         if ($result_tasks !== false && $result_tasks->num_rows > 0) {
             echo "<form action='7_check_task.php' method='POST'>";
-            echo "<table>";
+            echo "<table layout='auto'>";
             echo "<tr><th>Name</th><th>Status</th><th>Erledigt am</th><th>Erledigt</th><th>Aktionen</th></tr>";
             while ($row_tasks = $result_tasks->fetch_assoc()) {
                 echo "<tr>";
-                echo "<td>" . htmlspecialchars($row_tasks['name'], ENT_QUOTES, 'UTF-8') . "</td>";
+                echo '<td>' . htmlspecialchars($row_tasks['name'], ENT_QUOTES, 'UTF-8') . '</td>';
                 echo "<td>" . htmlspecialchars($row_tasks['status'], ENT_QUOTES, 'UTF-8') . "</td>";
                 echo "<td>" . htmlspecialchars($row_tasks['done_at'], ENT_QUOTES, 'UTF-8') . "</td>";
                 echo "<td><button name='task_id' value='" . htmlspecialchars($row_tasks['id'], ENT_QUOTES, 'UTF-8') . "'>Erledigt</button></td>";
@@ -151,7 +151,7 @@ session_start();
             echo "<input type='hidden' name='list_id' value='" . htmlspecialchars($list_id, ENT_QUOTES, 'UTF-8') . "'>";
             echo "</form>";
         } else {
-            echo "<p style='text-align: center;'>Keine Aufgaben gefunden</p>";
+            echo "<p style='text-align: center ;'>Keine Aufgaben gefunden</p>";
         }
 
         $stmt_tasks->close();
