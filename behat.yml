@@ -1,0 +1,14 @@
+default:
+  suites:
+    default:
+      paths:
+        - %paths.base%/features
+      contexts:
+        - FeatureContext
+  extensions:
+    Behat\MinkExtension:
+      base_url: http://localhost/todo_list
+      default_session: goutte
+      sessions:
+        goutte:
+          goutte: ~
