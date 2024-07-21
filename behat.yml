@@ -2,13 +2,13 @@ default:
   suites:
     default:
       paths:
-        - %paths.base%/features
+        - "%paths.base%/features"  # Pfad zu den Feature-Dateien
       contexts:
-        - FeatureContext
+        - FeatureContext            # Kontext-Datei, in der die Schritte implementiert sind
   extensions:
     Behat\MinkExtension:
-      base_url: http://localhost/todo_list
-      default_session: goutte
+      base_url: "http://localhost/todo_list"  # Basis-URL Ihrer Anwendung
+      default_session: "goutte"               # Standard-Sitzung
       sessions:
         goutte:
-          goutte: ~
+          goutte: ~                          # Verwendung des Goutte-Treibers für Tests
