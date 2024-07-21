@@ -192,7 +192,11 @@ session_start();
         $result_list = $stmt_list->get_result();
 
         // Button zurück zur Listenübersicht
-        echo "<div class='backButton'><button><a href='1_list_overview.php'>Zurück zur Listenübersicht</a></button></div>";
+        
+        // Button zurück zur Listenübersicht
+        echo "<div class='backButton'><button onclick=\"window.location.href='1_list_overview.php'\">Zurück zur Listenübersicht</button></div>";
+
+
 
         // Wenn die Liste gefunden wird, wird der Name als Überschrift ausgegeben, ansonsten wird eine Fehlermeldung ausgegeben
         if ($result_list !== false && $result_list->num_rows > 0) {
