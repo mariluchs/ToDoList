@@ -282,7 +282,7 @@ session_start();
 
         $stmt_tasks->close();
     }
-    if (isset($_SESSION['error'])) {
+    if (isset($_SESSION['error'])) { //Code mit Hilfe von ChatGPT erstellt
         echo "<script>
         document.addEventListener('DOMContentLoaded', () => {
             let errorMessage = document.querySelector('.error-message');

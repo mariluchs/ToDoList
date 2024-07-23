@@ -175,7 +175,7 @@ session_start();
     <?php if (isset($_SESSION['error']) || isset($_SESSION['delete_error'])): ?>
         <script>
             document.addEventListener('DOMContentLoaded', () => {
-                // Handle addition errors
+                // Fehlerbehandlung
                 <?php if (isset($_SESSION['error'])): ?>
                     const errorType = "<?php echo $_SESSION['error']; ?>";
                     const errorMessages = {
@@ -190,7 +190,7 @@ session_start();
                             messageElement.style.display = 'block';
                             setTimeout(() => {
                                 messageElement.style.display = 'none';
-                            }, 5000); // Hide after 5 seconds
+                            }, 5000); 
                         }
                     }
                     <?php unset($_SESSION['error']); ?>
@@ -211,7 +211,7 @@ session_start();
                             deleteMessageElement.style.display = 'block';
                             setTimeout(() => {
                                 deleteMessageElement.style.display = 'none';
-                            }, 5000); // Hide after 5 seconds
+                            }, 5000); 
                         }
                     }
                     <?php unset($_SESSION['delete_error']); ?>
@@ -258,10 +258,10 @@ session_start();
 
             if (valLength >= 50) {
                 inputBox.classList.add("error");
-                errorMessage.style.display = "block"; // Show the error message
+                errorMessage.style.display = "block"; // Fehlermeldung sichtbar
             } else {
                 inputBox.classList.remove("error");
-                errorMessage.style.display = "none"; // Hide the error message
+                errorMessage.style.display = "none"; // Fehlermeldung nicht sichtbar
             }
         });
 
