@@ -270,8 +270,8 @@ session_start();
                 echo "<td>" . htmlspecialchars($row_tasks['status'], ENT_QUOTES, 'UTF-8') . "</td>";
                 echo "<td>" . htmlspecialchars($row_tasks['done_at'], ENT_QUOTES, 'UTF-8') . "</td>";
                 echo "<td><button name='task_id' value='" . htmlspecialchars($row_tasks['id'], ENT_QUOTES, 'UTF-8') . "'>Erledigt</button></td>";
-                echo "<td><a class='delete-link' href='6_delete_task.php?id=" . htmlspecialchars($row_tasks['id'], ENT_QUOTES, 'UTF-8') . "'>Löschen</a></td>";
-            echo "</tr>";
+                echo "<td><a href='6_delete_task.php?id=" . htmlspecialchars($row_tasks['id'], ENT_QUOTES, 'UTF-8') . "&list_id=" . $list_id . "'>Löschen</a></td>";
+                echo "</tr>";
             }
             echo "</table>";
             echo "<input type='hidden' name='list_id' value='" . htmlspecialchars($list_id, ENT_QUOTES, 'UTF-8') . "'>";
@@ -306,7 +306,6 @@ session_start();
 
     $conn->close();
     ?>
-
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const inputBox = document.querySelector('.input-box');
