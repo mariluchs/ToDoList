@@ -6,7 +6,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $list_name = trim($_POST['list_name']);
     $date = date("Y-m-d");
 
-    $allowed_chars = "/^[a-zA-Z0-9?!,() -]*$/";
+    $allowed_chars = "/^[a-zA-Z0-9?!.,() -]*$/";
 
     if (!empty($list_name)) {
         if (preg_match($allowed_chars, $list_name)) {
