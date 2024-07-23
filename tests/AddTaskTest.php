@@ -1,50 +1,88 @@
 <?php
-// TestCase-Klasse von PHPUnit wird importiert
 use PHPUnit\Framework\TestCase;
 
-// Klasse für AddTask-Test wird definiert, erbt von TestCase
 class AddTaskTest extends TestCase
 {
-    // Private Variablen für die Datenbank-Mocks werden definiert
-    private $mysqli;
-    private $stmt;
+    private $conn;
 
-    // Setup-Methode, die vor jedem Test ausgeführt wird
     protected function setUp(): void
     {
-        // Mock für die mysqli-Klasse wird erstellt
-        $this->mysqli = $this->createMock(mysqli::class);
+        // Erstellen einer Mock-Datenbankverbindung
+        $this->conn = $this->getMockBuilder(mysqli::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
 
-        // Mock für die mysqli_stmt-Klasse wird erstellt
-        $this->stmt = $this->createMock(mysqli_stmt::class);
-        $this->stmt->method('execute')->willReturn(true);
-        $this->stmt->method('close');
-
-        // Methode prepare der mysqli-Klasse wird gemockt, um das Statement-Mock zurückzugeben
-        $this->mysqli->method('prepare')->willReturn($this->stmt);
-
-        // Setzen der POST-Parameter
+    public function testValidTaskNameAndListId()
+    {
         $_POST['task_name'] = 'Test Task';
         $_POST['list_id'] = '1';
-        $_SERVER['REQUEST_METHOD'] = 'POST';
-        
-        // Globale Variable für die Datenbankverbindung wird gesetzt
-        $GLOBALS['conn'] = $this->mysqli;
-    }
 
-    // Testmethode zur Überprüfung des Hinzufügens einer Aufgabe
-    public function testAddTask()
-    {
-        // Testskript wird inkludiert
+        $this->conn->expects($this->any())
+            ->method('prepare')
+            ->will($this->returnValue($this->createMock(mysqli_stmt::class)));
+
+        ob_start();
         include '5_add_task.php';
-        // Überprüfung, dass der Test ohne Fehler läuft
-        $this->assertTrue(true);
+        ob_end_clean();
+
+        $headers = headers_list();
+        $this->assertNotEmpty($headers, 'No headers found');
+        if (!empty($headers)) {
+            $this->assertStringContainsString('4_detail_page.php?list_id=1', $headers[0]);
+        }
     }
 
-    // TearDown-Methode, die nach jedem Test ausgeführt wird
+    public function testEmptyTaskName()
+    {
+        $_POST['task_name'] = '';
+        $_POST['list_id'] = '1';
+
+        ob_start();
+        include '5_add_task.php'; 
+        ob_end_clean();
+
+        $this->assertEquals('empty_task', $_SESSION['error'] ?? null);
+    }
+
+    public function testEmptyListId()
+    {
+        $_POST['task_name'] = 'Test Task';
+        $_POST['list_id'] = '';
+
+        ob_start();
+        include '5_add_task.php';
+        ob_end_clean();
+
+        $this->assertEquals('empty_task', $_SESSION['error'] ?? null);
+    }
+
+    public function testInvalidTaskName()
+    {
+        $_POST['task_name'] = 'Invalid@Task';
+        $_POST['list_id'] = '1';
+
+        ob_start();
+        include '5_add_task.php';
+
+        $this->assertEquals('invalid_symbol', $_SESSION['error'] ?? null);
+    }
+
+    public function testTaskNameLengthExceeded()
+    {
+        $_POST['task_name'] = str_repeat('a', 51);
+        $_POST['list_id'] = '1';
+
+        ob_start();
+        include '5_add_task.php'; 
+        ob_end_clean();
+
+        $this->assertEquals('length_exceeded', $_SESSION['error'] ?? null);
+    }
+
     protected function tearDown(): void
     {
-        // Aufräumen der globalen Variablen
-        unset($GLOBALS['conn'], $_POST['task_name'], $_POST['list_id'], $_SERVER['REQUEST_METHOD']);
+        $this->conn = null;
     }
 }
+?>
