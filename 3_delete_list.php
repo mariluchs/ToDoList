@@ -41,20 +41,24 @@ if (isset($_GET['id'])) {
             $stmt->bind_param("i", $list_id);
             $stmt->execute();
             $stmt->close();
+
+            // Weiterleitung auf die Listenübersicht
+            header("Location: 1_list_overview.php");
+            exit();
         } else {
             // Weiterleitung zurück mit einer Fehlermeldung, wenn nicht alle Aufgaben erledigt sind
-            $_SESSION['error'] = "Die Liste kann nicht gelöscht werden, da noch nicht alle Aufgaben erledigt sind.";
+            $_SESSION['delete_error'] = "Die Liste kann nicht gelöscht werden, da noch nicht alle Aufgaben erledigt sind.";
             header("Location: 1_list_overview.php");
             exit();
         }
     } else {
-        $_SESSION['error'] = "Die Liste existiert nicht.";
+        $_SESSION['delete_error'] = "Die Liste existiert nicht.";
+        header("Location: 1_list_overview.php");
+        exit();
     }
 } else {
-    $_SESSION['error'] = "Keine Liste ausgewählt.";
+    $_SESSION['delete_error'] = "Keine Liste ausgewählt.";
+    header("Location: 1_list_overview.php");
+    exit();
 }
-
-// Weiterleitung auf die Listenübersicht
-header("Location: 1_list_overview.php");
-exit();
 ?>

@@ -142,7 +142,7 @@ session_start();
             background-color: rgba(162,135,235, 0.8);
         }
 
-        .error-message, .invalid-symbol-message, .duplicate-name-message {
+        .error-message, .invalid-symbol-message, .duplicate-name-message, .delete-error-message, .nonexistent-list-error-message, .no-list-selected-error-message {
             display: none; /* Hide by default */
             color: red;
             font-size: 14px;
@@ -152,10 +152,6 @@ session_start();
     </style>
 </head>
 <body>
-<?php if (isset($_SESSION['error'])): ?>
-        <p style="color: red; text-align: center;"><?php echo htmlspecialchars($_SESSION['error'], ENT_QUOTES, 'UTF-8'); ?></p>
-        <?php unset($_SESSION['error']); ?>
-    <?php endif; ?>
     <h1>Task Masters</h1>
 
     <div class="input-box">
@@ -169,33 +165,59 @@ session_start();
             <p class="error-message">Achtung! Zeichenlimit erreicht (50).</p>
             <p class="invalid-symbol-message">Ungültige Zeichen verwendet. Erlaubt sind nur alphanumerische Zeichen und ?! , ( ) -.</p>
             <p class="duplicate-name-message">Eine Liste mit diesem Namen existiert bereits.</p>
+            <p class="delete-error-message">Die Liste kann nicht gelöscht werden, da noch nicht alle Aufgaben erledigt sind.</p>
+            <p class="nonexistent-list-error-message">Die Liste existiert nicht.</p>
+            <p class="no-list-selected-error-message">Keine Liste ausgewählt.</p>
             <button type="submit">Hinzufügen</button>
         </form>
     </div>
 
-    <?php if (isset($_SESSION['error'])): ?>
+    <?php if (isset($_SESSION['error']) || isset($_SESSION['delete_error'])): ?>
         <script>
             document.addEventListener('DOMContentLoaded', () => {
-                const errorType = "<?php echo $_SESSION['error']; ?>";
-                const errorMessages = {
-                    "duplicate_name": ".duplicate-name-message",
-                    "invalid_symbol": ".invalid-symbol-message",
-                    "empty_title": ".empty-title-message"
-                };
-                const messageClass = errorMessages[errorType];
-
-                if (messageClass) {
-                    const messageElement = document.querySelector(messageClass);
-                    if (messageElement) {
-                        messageElement.style.display = 'block';
-                        setTimeout(() => {
-                            messageElement.style.display = 'none';
-                        }, 5000); // Hide after 5 seconds
+                // Handle addition errors
+                <?php if (isset($_SESSION['error'])): ?>
+                    const errorType = "<?php echo $_SESSION['error']; ?>";
+                    const errorMessages = {
+                        "duplicate_name": ".duplicate-name-message",
+                        "invalid_symbol": ".invalid-symbol-message",
+                        "empty_title": ".error-message"
+                    };
+                    const messageClass = errorMessages[errorType];
+                    if (messageClass) {
+                        const messageElement = document.querySelector(messageClass);
+                        if (messageElement) {
+                            messageElement.style.display = 'block';
+                            setTimeout(() => {
+                                messageElement.style.display = 'none';
+                            }, 5000); // Hide after 5 seconds
+                        }
                     }
-                }
+                    <?php unset($_SESSION['error']); ?>
+                <?php endif; ?>
+
+                // Handle deletion errors
+                <?php if (isset($_SESSION['delete_error'])): ?>
+                    const deleteErrorType = "<?php echo $_SESSION['delete_error']; ?>";
+                    const deleteErrorMessages = {
+                        "Die Liste kann nicht gelöscht werden, da noch nicht alle Aufgaben erledigt sind.": ".delete-error-message",
+                        "Die Liste existiert nicht.": ".nonexistent-list-error-message",
+                        "Keine Liste ausgewählt.": ".no-list-selected-error-message"
+                    };
+                    const deleteMessageClass = deleteErrorMessages[deleteErrorType];
+                    if (deleteMessageClass) {
+                        const deleteMessageElement = document.querySelector(deleteMessageClass);
+                        if (deleteMessageElement) {
+                            deleteMessageElement.style.display = 'block';
+                            setTimeout(() => {
+                                deleteMessageElement.style.display = 'none';
+                            }, 5000); // Hide after 5 seconds
+                        }
+                    }
+                    <?php unset($_SESSION['delete_error']); ?>
+                <?php endif; ?>
             });
         </script>
-        <?php unset($_SESSION['error']); ?>
     <?php endif; ?>
 
     <?php

@@ -3,7 +3,7 @@ session_start();
 include "0_database_connection.php";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $list_name = $_POST['list_name'];
+    $list_name = trim($_POST['list_name']);
     $date = date("Y-m-d");
 
     $allowed_chars = "/^[a-zA-Z0-9?!,() -]*$/";
@@ -34,11 +34,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         } else {
             // Fehlernachricht für ungültige Zeichen setzen
-            $_SESSION['error'] = "invalid_symbol";
+            $_SESSION['error'] = 'invalid_symbol';
         }
     } else {
         // Fehlernachricht für leeren Titel setzen
-        $_SESSION['error'] = "empty_title";
+        $_SESSION['error'] = 'empty_title';
     }
 
     // Weiterleitung zur Übersichtsseite mit Fehlermeldung
