@@ -167,12 +167,42 @@ session_start();
         }
 
         .error-message {
-            display: none; /* Hide the message by default */
+            display: none; /* Hide by default */
             color: red;
             font-size: 14px;
             text-align: center;
             margin-top: 10px;
         }
+
+        .invalid-symbol-message {
+            display: none; /* Hide by default */
+            color: red;
+            font-size: 14px;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .duplicate-task-message {
+            display: none; /* Hide by default */
+            color: red;
+            font-size: 14px;
+            text-align: center;
+            margin-top: 10px;
+        }
+        
+
+        a {
+            text-decoration: none;
+        }
+
+        .edit-link {
+            color: blue;
+        }
+
+        .delete-link {
+            color: red;
+        }
+
     </style>
 </head>
 <body>
@@ -192,11 +222,7 @@ session_start();
         $result_list = $stmt_list->get_result();
 
         // Button zurück zur Listenübersicht
-        
-        // Button zurück zur Listenübersicht
         echo "<div class='backButton'><button onclick=\"window.location.href='1_list_overview.php'\">Zurück zur Listenübersicht</button></div>";
-
-
 
         // Wenn die Liste gefunden wird, wird der Name als Überschrift ausgegeben, ansonsten wird eine Fehlermeldung ausgegeben
         if ($result_list !== false && $result_list->num_rows > 0) {
@@ -219,6 +245,8 @@ session_start();
                 <span class="limit-num">/50</span>
             </div>
             <p class="error-message">Achtung! Zeichenlimit erreicht (50).</p> <!-- Message for max length -->
+            <p class="invalid-symbol-message">Ungültige Zeichen verwendet. Erlaubt sind nur alphanumerische Zeichen und ?! , ( ) -.</p> <!-- Message for invalid symbols -->
+            <p class="duplicate-task-message">Diese Aufgabe existiert bereits.</p> <!-- Message for duplicate task -->
             <button type="submit">Hinzufügen</button>
         </form>
     </div>
@@ -242,8 +270,8 @@ session_start();
                 echo "<td>" . htmlspecialchars($row_tasks['status'], ENT_QUOTES, 'UTF-8') . "</td>";
                 echo "<td>" . htmlspecialchars($row_tasks['done_at'], ENT_QUOTES, 'UTF-8') . "</td>";
                 echo "<td><button name='task_id' value='" . htmlspecialchars($row_tasks['id'], ENT_QUOTES, 'UTF-8') . "'>Erledigt</button></td>";
-                echo "<td><a href='6_delete_task.php?id=" . htmlspecialchars($row_tasks['id'], ENT_QUOTES, 'UTF-8') . "&list_id=" . $list_id . "'>Löschen</a></td>";
-                echo "</tr>";
+                echo "<td><a class='delete-link' href='6_delete_task.php?id=" . htmlspecialchars($row_tasks['id'], ENT_QUOTES, 'UTF-8') . "'>Löschen</a></td>";
+            echo "</tr>";
             }
             echo "</table>";
             echo "<input type='hidden' name='list_id' value='" . htmlspecialchars($list_id, ENT_QUOTES, 'UTF-8') . "'>";
@@ -253,6 +281,27 @@ session_start();
         }
 
         $stmt_tasks->close();
+    }
+    if (isset($_SESSION['error'])) {
+        echo "<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let errorMessage = document.querySelector('.error-message');
+            let invalidSymbolMessage = document.querySelector('.invalid-symbol-message');
+            let duplicateTaskMessage = document.querySelector('.duplicate-task-message');
+            let errorType = '" . $_SESSION['error'] . "';
+            if (errorType === 'length_exceeded') {
+                errorMessage.style.display = 'block';
+                setTimeout(() => errorMessage.style.display = 'none', 5000);
+            } else if (errorType === 'invalid_symbol') {
+                invalidSymbolMessage.style.display = 'block';
+                setTimeout(() => invalidSymbolMessage.style.display = 'none', 5000);
+            } else if (errorType === 'duplicate_task') {
+                duplicateTaskMessage.style.display = 'block';
+                setTimeout(() => duplicateTaskMessage.style.display = 'none', 5000);
+            }
+        });
+        </script>";
+        unset($_SESSION['error']);
     }
 
     $conn->close();
