@@ -152,6 +152,10 @@ session_start();
     </style>
 </head>
 <body>
+<?php if (isset($_SESSION['error'])): ?>
+        <p style="color: red; text-align: center;"><?php echo htmlspecialchars($_SESSION['error'], ENT_QUOTES, 'UTF-8'); ?></p>
+        <?php unset($_SESSION['error']); ?>
+    <?php endif; ?>
     <h1>Task Masters</h1>
 
     <div class="input-box">

@@ -82,7 +82,8 @@ $conn->close();
             padding: 10px;
             border-radius: 6px;
             box-shadow: 0 5px 10px rgba(0,0,0,0.2);
-            margin: 20px auto;
+            margin: 0 auto;
+            margin-bottom: 20px;
         }
 
         .input-box input {
@@ -111,6 +112,7 @@ $conn->close();
             margin-bottom: 10px;
             display: block;
             color: rgba(162,135,235);
+            text-align: left;
         }
 
         .input-box .character {
@@ -121,11 +123,6 @@ $conn->close();
             margin-top: 10px;
         }
 
-        .input-box.error input {
-            border-color: red;
-            color: red;
-        }
-
         .input-box.error .title {
             color: red;
         }
@@ -134,9 +131,14 @@ $conn->close();
             color: red;
         }
 
+        .input-box.error input {
+            border-color: red;
+            color: red;
+        }
+
         .input-box button {
             display: block;
-            margin: 20px auto;
+            margin: 0 auto;
             padding: 10px 20px;
             background-color: rgba(162,135,235);
             color: white;
@@ -159,7 +161,7 @@ $conn->close();
             text-align: center;
             margin-top: 10px;
         }
-
+        
     </style>
 </head>
 <body>
